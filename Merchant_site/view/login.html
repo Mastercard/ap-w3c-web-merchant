@@ -1,0 +1,125 @@
+<!-- Copyright (c) 2021 Mastercard
+ 
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+ 
+    http://www.apache.org/licenses/LICENSE-2.0
+ 
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+ 
+-->
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Ghokart</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/site.css" rel="stylesheet" />
+    <script src="js/jquery-1.11.3.min.js" type="text/javascript"></script>
+    <script src="js/browser-polyfill.min.js"></script>
+    <script src="js/merchantArtefact.js"></script>
+    <style>
+        .invalid-feedback {
+            width: 100%;
+            margin-top: .25rem;
+            color: #dc3545;
+        }
+        
+        .blue-button {
+            border: 3px solid #48C6EA;
+            padding: 5px;
+            width: 35%;
+            color: #48C6EA;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid zero-padding">
+        <header>
+            <nav class="navbar">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="#">
+                            <h2>Ghokart</h2>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <section class="hero-banner"></section>
+        <section class="login-container">
+            <h2>Log in</h2>
+            <br>
+            <div class="row">
+                <div class="col-lg-2 col-md-2 col-sm-3 col-xs-12 edit-label">Username</div>
+                <div class="col-lg-4 col-md-4 col-sm-5 col-xs-12">
+                    <input type="text" id="username">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2 col-md-2 col-sm-3 col-xs-12 edit-label">Password</div>
+                <div class="col-lg-4 col-md-4 col-sm-5 col-xs-12">
+                    <input type="password" id="password">
+                </div>
+            </div>
+            <!-- <div class="row">
+                <div class="col-lg-2 col-md-2 col-sm-3 col-xs-12 edit-label"></div>
+                <div class="col-lg-4 col-md-4 col-sm-5 col-xs-12 isNonW3C">
+                    <input type="checkbox" id="isNonW3C" /> Non-W3C flow
+                </div>
+            </div> -->
+            <div class="row">
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 text-right edit-label"></div>
+                <div class="col-lg-4 col-md-4 col-sm-5 col-xs-12 text-center">
+                    <button class="image-button blue-button" type="button" id="login">
+                        LOGIN
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        "use strict";
+
+        $(function() {
+            /* if ((!!window.PaymentRequest && !!window.PaymentManager) && (/Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor))) {
+                $('.isNonW3C').css('display', 'block');
+            } */
+
+            if (merchant_core.isSupportedBrowser()) {
+                $('.isNonW3C').css('display', 'block');
+            }
+
+            try {
+                if (typeof localStorage !== 'undefined' && window.localStorage.getItem('isNonW3C') === 'true') {
+                    $('#isNonW3C').prop('checked', true);
+                }
+
+                $('#isNonW3C').change(function() {
+                    if ($(this).is(':checked')) {
+                        window.localStorage.setItem('isNonW3C', true);
+                    } else {
+                        window.localStorage.setItem('isNonW3C', false);
+                    }
+                });
+            } catch (error) {
+                console.log(error);
+            }
+
+            $("#login").click(function() {
+                window.location.href = window.location.origin + '/index';
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,162 @@
+<!-- Copyright (c) 2021 Mastercard
+ 
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+ 
+    http://www.apache.org/licenses/LICENSE-2.0
+ 
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+ 
+-->
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Ghokart</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="referrer" content="no-referrer" />
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/site.css" rel="stylesheet" />
+
+    <script src="js/jquery-1.11.3.min.js" type="text/javascript"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/browser-polyfill.min.js"></script>
+    <script src="js/merchantArtefact.js"></script>
+    <script src="js/bundledJS.js"></script>
+    <script src="js/handlePayments.js"></script>
+
+    <style>
+        .btn-blue {
+            background: #48C6EA;
+            color: #fff;
+        }
+        
+        #responseSection {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid zero-padding landing-page">
+        <header>
+            <nav class="navbar">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="#">
+                            <h2>Ghokart</h2>
+                        </a>
+                    </div>
+                    <div aria-expanded="false" class="collapse navbar-collapse" id="GhoNow">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li *ngIf="data.loginSuccess">
+                                <a href="javascript:;" onclick="profile();">Profiles</a>
+                            </li>
+                            <li *ngIf="data.loginSuccess">
+                                <a href="javascript:;" onclick="myaccount();">My Account</a>
+                            </li>
+                            <li class="hidden-xs">
+                                <a class="cart-container">Cart
+                                    <img src="images/cart_icon.png" alt="cart" class="cart" />
+                                    <div class="cart-count">0</div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <section class="hero-banner"></section>
+        <section class="content" id="responseSection">
+            <div class="row text-center" id="loader">
+                <img src="images/loader.gif">
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" id="reponseModal" role="dialog">
+                <div class="responseContent">
+                    <div id="payment-fail-pane"></div>
+                    <div id="payment-success-pane">
+                        <div class="paymentSuccessMessage"></div>
+                        <p>Following are the payment credentials:</p>
+                        <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 formLabel">Request ID:</div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" id="requestId"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 formLabel">Account Number:</div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" id="accountNumber"></div>
+                            </div>
+                            <div class="row payerName">
+                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 formLabel">Payer Name:</div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" id="payerName"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 formLabel">Card Number:</div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" id="cardNumber"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 formLabel">Expiry Date:</div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" id="expiryDate"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 formLabel">CVV:</div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" id="cvv"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="payment-rfp-pane">
+                        <div class="paymentSuccessMessage"></div>
+                        <p>Following are the payment confirmation details:</p>
+                        <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 formLabel">Request ID:</div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" id="requestIdRFP"></div>
+                            </div>
+                            <div class="row payerNameRFP">
+                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 formLabel">Payer Name:</div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" id="payerNameRFP"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 formLabel">DSS Ref Number:</div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" id="dss"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 formLabel">Status:</div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" id="status"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <footer>
+            <div class="coneect-with-us ">
+                Connect With Us:
+                <a><img alt="facebook_icon " src="images/facebook_icon.png "></a>
+                <a><img alt="twitter_icon " src="images/twitter_icon.png "></a>
+                <a><img alt="pintrest_icon " src="images/pintrest_icon.png "></a>
+                <a><img alt="instagram_icon " src="images/instagram_icon.png "></a>
+            </div>
+            <div class="footer-links ">
+                <ul>
+                    <li><a>Get Email Updates</a></li>
+                    <li><a>Catalog</a></li>
+                    <li><a>Collections</a></li>
+                    <li><a>Our Stores</a></li>
+                    <li><a>Blog</a></li>
+                    <li><a>About Us</a></li>
+                    <li><a>Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="version pull-right ">2.4.3</div>
+        </footer>
+    </div>
+</body>
+
+</html>

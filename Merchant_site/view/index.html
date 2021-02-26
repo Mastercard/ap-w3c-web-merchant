@@ -1,0 +1,317 @@
+<!-- Copyright (c) 2021 Mastercard
+ 
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+ 
+    http://www.apache.org/licenses/LICENSE-2.0
+ 
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+ 
+-->
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Ghokart</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/site.css" rel="stylesheet" />
+    <script src="js/browser-polyfill.min.js"></script>
+</head>
+
+<body>
+    <div class="container-fluid zero-padding landing-page hideAll">
+        <header>
+            <nav class="navbar">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="#">
+                            <h2>Ghokart</h2>
+                        </a>
+                        <a href="javascript:void(0);" class="icon" onclick="expandMenu()">
+                            <span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span>
+                        </a>
+                    </div>
+                    <div aria-expanded="false" class="collapse navbar-collapse topnav" id="GhoNow">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li *ngIf="data.loginSuccess">
+                                <a href="javascript:;" class="profile">Profiles</a>
+                            </li>
+                            <li *ngIf="data.loginSuccess">
+                                <a href="javascript:;" onclick="myaccount();">My Account</a>
+                            </li>
+                            <li class="hidden-xs">
+                                <a class="cart-container">Cart
+                                    <img src="images/cart_icon.png" alt="cart" class="cart" />
+                                    <div class="cart-count">0</div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <section class="hero-banner"></section>
+        <section class="content" id="mainContent">
+            <h2>CATALOG</h2>
+            <div class="products">
+                <ul>
+                    <li class="product-item-container" onclick="addToCartModal('socks')">
+                        <div class="product-item">
+                            <img alt="products" class="product-image" src="images/product_socks_red.png">
+                            <p class="product-title">Soccer Socks</p>
+                            <p class="product-price">$7.00</p>
+                        </div>
+                    </li>
+                    <li class="product-item-container" onclick="addToCartModal('tshirt')">
+                        <div class="product-item ">
+                            <img alt="products " class="product-image " src="images/product_tshirt_red.png ">
+                            <p class="product-title ">Soccer tshirt</p>
+                            <p class="product-price ">$17.00</p>
+                        </div>
+                    </li>
+                    <li class="product-item-container" onclick="addToCartModal('gloves')">
+                        <div class="product-item ">
+                            <img alt="products " class="product-image " src="images/product_gloves_orange.png ">
+                            <p class="product-title ">Soccer gloves</p>
+                            <p class="product-price ">$15.00</p>
+                        </div>
+                    </li>
+                    <li class="product-item-container" onclick="addToCartModal('shoes')">
+                        <div class="product-item ">
+                            <img alt="products " class="product-image " src="images/product_shoes_red.png ">
+                            <p class="product-title ">Soccer shoes</p>
+                            <p class="product-price ">$31.00</p>
+                        </div>
+                    </li>
+                    <li class="product-item-container" onclick="addToCartModal('ball')">
+                        <div class="product-item ">
+                            <img alt="products " class="product-image " src="images/product_balls_orange.png ">
+                            <p class="product-title ">Soccer ball</p>
+                            <p class="product-price ">$23.00</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+        <section class="content" id="responseSection">
+            <div class="row text-center" id="loader">
+                <img src="images/loader.gif">
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" id="reponseModal" role="dialog">
+                <div class="responseContent">
+                    <div id="payment-fail-pane"></div>
+                </div>
+            </div>
+        </section>
+        <footer>
+            <div class="coneect-with-us ">
+                Connect With Us:
+                <a><img alt="facebook_icon " src="images/facebook_icon.png "></a>
+                <a><img alt="twitter_icon " src="images/twitter_icon.png "></a>
+                <a><img alt="pintrest_icon " src="images/pintrest_icon.png "></a>
+                <a><img alt="instagram_icon " src="images/instagram_icon.png "></a>
+            </div>
+            <div class="footer-links ">
+                <ul>
+                    <li><a>Get Email Updates</a></li>
+                    <li><a>Catalog</a></li>
+                    <li><a>Collections</a></li>
+                    <li><a>Our Stores</a></li>
+                    <li><a>Blog</a></li>
+                    <li><a>About Us</a></li>
+                    <li><a>Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="version pull-right ">2.4.3</div>
+        </footer>
+
+        <div class="checkout-slider" style="height: 100%;overflow-y: scroll;display: none;">
+            <h3>Your Cart
+                <span class="close pull-right">X </span>
+            </h3>
+            <div class="emptycart text-center">
+                <img alt="empty" src="images/shopping-cart.png" style="width:40px;margin-top: 10%;">
+                <h4>Cart is empty</h4>
+                <h5><small>
+                        Looks like you have no items in your shopping cart
+                    </small></h5>
+            </div>
+            <div class="nonEmptyCart">
+                <div id="cart-item"></div>
+                <h4>
+                    Subtotal
+                    <span class="subtotal-price pull-right">$00.00</span>
+                </h4>
+                <p class="shipping-text">
+                    <em>Shipping and taxes calculated at checkout.</em>
+                </p>
+                <div class="checkout w3c">
+                    <button class="image-button addToBasketButton" onclick="displayDynamicBtns()">
+                        <img alt="checkout" src="images/checkout.png">
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="profile-slider" style="height: 100%;overflow-y: scroll;display: none;">
+            <h3>Options
+                <span class="close pull-right">X </span>
+            </h3>
+            <div class="col-xs-12 profile-slider-content">
+                <div class="col custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="checkbox-buyer-name" checked>
+                    <label class="custom-control-label" for="checkbox-buyer-name">
+                        Payer Name
+                    </label>
+                </div>
+                <div class="col custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="checkbox-buyer-phone" checked>
+                    <label class="custom-control-label" for="checkbox-buyer-phone">
+                        Payer Phone
+                    </label>
+                </div>
+                <div class="col custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="checkbox-buyer-email" checked>
+                    <label class="custom-control-label" for="checkbox-buyer-email">
+                        Payer Email
+                    </label>
+                </div>
+                <div class="col custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="checkbox-shipping" checked>
+                    <label class="custom-control-label" for="checkbox-shipping">
+                        Payer Shipping Address
+                    </label>
+                </div>
+                <div class="col custom-control shipping-type-div" style="display: none;">
+                    <label class="custom-control-label" for="checkbox-shipping">
+                        Shipping type
+                    </label>
+                    <select id="shippingType">
+                        <option value="shipping" selected>Shipping</option>
+                        <option value="delivery">Delivery</option>
+                        <option value="pickup">Pickup</option>
+                    </select>
+                </div>
+                <div class="col custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="checkbox-billing" checked>
+                    <label class="custom-control-label" for="checkbox-billing">
+                        Payer Billing Address
+                    </label>
+                </div>
+                <div class="buttonDiv">
+                    <input type="button" value="Ok" class="btn btn-primary close" />
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="container-fluid zero-padding loader-page hideAll">
+        <div class="row text-center">
+            <img src="images/loader.gif">
+        </div>
+    </div>
+
+    <div class="container zero-padding pba-page hideAll">
+        <div class="row panel">
+            <h2>Ghokart</h2>
+            <h4>
+                Secure payment
+                <img src="images/locked.png" alt="locked" style="width: 15px;" />
+            </h4>
+        </div>
+        <div class="row greyBg panel">
+            <div class="dynamic-btns">
+                <h3>
+                    Payment details <br>
+                    <small>Please select your payment method.</small>
+                </h3>
+                <table class="table table-bordered">
+                    <tr>
+                        <td>
+                            <input type="radio" name="dynamic-btns" value="basic-cards" />
+                            <label>Credit or Debit card</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="radio" name="dynamic-btns" value="paypal" />
+                            <label>PayPal</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="radio" name="dynamic-btns" value="unionpay" />
+                            <label>UnionPay SecurePay</label>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="row greyBg panel">
+            <div class="order-details">
+                <h3>Order details</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="btns-group pull-right">
+                <button class="noBorder" onclick="cancelCheckout()" tabindex="-1">Cancel</button>
+                <button class="btn btn-blue" id="paynow" onclick="checkoutService()" tabindex="-1">Pay now</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="cart-items" role="dialog" data-keyboard="true" data-backdrop="static">
+        <div class=" modal-dialog modal-lg ">
+            <div class="modal-content ">
+                <span>
+                    <img data-dismiss="modal" alt="close " class="pull-right "
+                        src="images/product_detail_close_button.png ">
+                </span>
+                <div class="modal-body " style="margin-top:35px; ">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 ">
+                        <div class="product-detail-img" id="product-detail-img">
+                        </div>
+                    </div>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 ">
+                        <div class="product-detail-info ">
+                            <p class="product-title" id="product-title"></p>
+                            <p class="product-price" id="product-price"></p>
+                            <p class="product-content">
+
+                            </p>
+                            <p class="size-text ">Size:</p>
+                            <div class="col-lg-12 size-container padding0 ">
+                                <div class="product-size btn-blue" onclick="setProductSize(this)">XS</div>
+                                <div class="product-size" onclick="setProductSize(this)">S</div>
+                                <div class="product-size" onclick="setProductSize(this)">M</div>
+                                <div class="product-size" onclick="setProductSize(this)">XL</div>
+                            </div>
+                            <button class="image-button addToBasketButton" onclick="addToCart()">
+                                <img alt="Add to Cart" class="img-responsive" src="images/add_to_cart_button.png">
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/jquery-1.11.3.min.js" type="text/javascript"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <!-- <script src="js/constants.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/utils.js"></script> -->
+    <script src="js/merchantArtefact.js"></script>
+    <!-- <script src="js/cartDetail.js"></script>
+    <script src="js/merchant.js"></script> -->
+    <script src="js/bundledJS.js"></script>
+</body>
+
+</html>
